@@ -1,21 +1,41 @@
 from django.shortcuts import render,redirect
-from .models import Area,PublicoAlvo,Curso
-from .forms import AreaForm,PublicoAlvoForm,CursoForm
+from .models import Area, PublicoAlvo, Curso, Usuario
+from .forms import AreaForm, PublicoAlvoForm, CursoForm, UsuarioFormCadastro
+from django.contrib.auth import authenticate, login
+
+def cadastro(request):
+    form = UsuarioFormCadastro(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('inicio')
+    context={
+        'form' : form
+    }
+    return render(request, 'cadastro.html', context)
+
+def autenticar(request):
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request,username=username,password=password)
+
+        if user is not None:
+            login(request,user)
+            return redirect('inicio')
+        else:
+            return render(request,'login.html') 
+    else:
+        return render(request,'login.html')    
 
 
-# Create your views here.
 
 def inicio(request):
     return render(request,'index.html')
 
-def login(request):
-    return render(request,'login.html')
-
 # def perfil(request):
 #     return render(request,'perfil.html')
 
-def cadastro(request):
-    return render(request,'cadastro.html')
 
 def curso_detalhe(request):
     return render(request,'curso_detalhe.html')
@@ -126,3 +146,4 @@ def curso_cadastrar(request):
         'form': form
     }
     return render(request,'privado/curso_cadastrar.html',context)
+
