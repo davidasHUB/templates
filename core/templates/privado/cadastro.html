@@ -76,9 +76,9 @@
   </div>
 </div>
 
-<!-- 
-<script src="assets/js/nav.js"></script>
-<script src="assets/js/auth.js"></script> -->
 
 {% endblock %}
 
+{% block scripts %}
+<script src="{% static 'assets/js/auth.js' %}"></script>
+{% endblock %}

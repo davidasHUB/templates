@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import Area, PublicoAlvo, Curso, Usuario
 from .forms import AreaForm, PublicoAlvoForm, CursoForm, UsuarioFormCadastro
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 def cadastro(request):
     form = UsuarioFormCadastro(request.POST or None)
@@ -24,11 +24,14 @@ def autenticar(request):
             login(request,user)
             return redirect('inicio')
         else:
-            return render(request,'login.html') 
+            return render(request,'privado/login.html') 
     else:
-        return render(request,'login.html')    
+        return render(request,'privado/login.html')    
 
 
+def sair(request):
+    logout(request)
+    return redirect('inicio')
 
 def inicio(request):
     return render(request,'index.html')
